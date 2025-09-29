@@ -11,18 +11,15 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 1️⃣ Checkout the repo
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      # 2️⃣ Set up JDK 17
       - name: Set up JDK 17
         uses: actions/setup-java@v3
         with:
           distribution: temurin
           java-version: 17
 
-      # 3️⃣ Cache Maven dependencies
       - name: Cache Maven dependencies
         uses: actions/cache@v3
         with:
@@ -31,14 +28,8 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-maven-
 
-      # 4️⃣ Set environment variable for H2 (in-memory DB)
-      - name: Set environment for H2
-        run: echo "SPRING_DATASOURCE_URL=jdbc:h2:mem:testdb" >> $GITHUB_ENV
-
-      # 5️⃣ Build the project (skip tests to separate logs)
       - name: Build project
-        run: mvn clean install -DskipTests
+        run: mvn clean install -B
 
-      # 6️⃣ Run unit and API tests with full output
       - name: Run unit and API tests
-        run: mvn test -DtrimStackTrace=false -Dsurefire.printSummary=true
+        run: mvn test -Dspring.profiles.active=test -B
