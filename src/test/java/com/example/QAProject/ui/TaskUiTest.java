@@ -8,6 +8,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
@@ -17,13 +18,25 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class TaskUiTest {
 
     private WebDriver driver;
-
     @BeforeEach
     void setup() {
         WebDriverManager.chromedriver().setup();
-        driver = new ChromeDriver();
+
+        ChromeOptions options = new ChromeOptions();
+        options.addArguments("--headless=new"); // headless mode
+        options.addArguments("--no-sandbox");
+        options.addArguments("--disable-dev-shm-usage");
+        options.addArguments("--remote-allow-origins=*");
+
+        // Use Windows temp directory for user data
+        String tempDir = System.getProperty("java.io.tmpdir") + "chrome-user-data";
+        options.addArguments("--user-data-dir=" + tempDir);
+
+        driver = new ChromeDriver(options);
         driver.get("http://localhost:8080/login.html"); // change if needed
     }
+
+
 
     @AfterEach
     void teardown() {
