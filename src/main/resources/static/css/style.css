@@ -1,0 +1,36 @@
+body {
+    font-family: Arial, sans-serif;
+    padding: 20px;
+}
+
+h1, h2 {
+    text-align: center;
+}
+
+.task-form, .login-container {
+    max-width: 400px;
+    margin: 0 auto 20px;
+    text-align: center;
+}
+
+.task-form input, .login-container input {
+    padding: 8px;
+    margin: 5px;
+    width: 90%;
+}
+
+.task-form button, .login-container button {
+    padding: 8px 15px;
+    margin-top: 5px;
+}
+
+#taskList li {
+    list-style: none;
+    padding: 5px 0;
+    display: flex;
+    justify-content: space-between;
+}
+
+.task-btn {
+    margin-left: 5px;
+}
