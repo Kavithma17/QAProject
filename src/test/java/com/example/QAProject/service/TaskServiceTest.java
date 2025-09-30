@@ -33,6 +33,7 @@ class TaskServiceTest {
         assertEquals("Title is required", exception.getMessage());
     }
 
+
     @Test
     void addTask_shouldSaveTask_whenTitleIsValid() {
         Task task = Task.builder().title("Test Task").description("desc").build();
