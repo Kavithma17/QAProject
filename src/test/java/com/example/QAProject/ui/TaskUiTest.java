@@ -1,9 +1,7 @@
 package com.example.QAProject.ui;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -13,19 +11,18 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import java.time.Duration;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
-
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class TaskUiTest {
 
     private WebDriver driver;
 
-    @BeforeEach
+    @BeforeAll
     void setup() {
         WebDriverManager.chromedriver().setup();
         driver = new ChromeDriver();
-        driver.get("http://localhost:8080/login.html"); // change if needed
     }
 
-    @AfterEach
+    @AfterAll
     void teardown() {
         if (driver != null) driver.quit();
     }
