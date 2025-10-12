@@ -12,27 +12,27 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import java.time.Duration;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+//@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class TaskUiTest {
 
     private WebDriver driver;
 
-    @BeforeAll
+    @BeforeEach
     void setup() {
 //        WebDriverManager.chromedriver().setup();
 
         ChromeOptions options = new ChromeOptions();
-        options.addArguments("--no-sandbox");
-        options.addArguments("--disable-dev-shm-usage");
-        options.addArguments("--headless=new");
-        options.addArguments("--disable-gpu");
+//        options.addArguments("--no-sandbox");
+//        options.addArguments("--disable-dev-shm-usage");
+//        options.addArguments("--headless=new");
+//        options.addArguments("--disable-gpu");
 
         // ✅ Add this line to fix your issue
-        options.addArguments("--user-data-dir=/tmp/chrome-" + System.currentTimeMillis());
+//        options.addArguments("--user-data-dir=/tmp/chrome-" + System.currentTimeMillis());
         driver = new ChromeDriver(options);
     }
 
-    @AfterAll
+    @AfterEach
     void teardown() {
         if (driver != null) driver.quit();
     }

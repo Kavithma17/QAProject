@@ -10,4 +10,5 @@ import org.junit.runner.RunWith;
         glue = "com.example.QAProject"  // include package of step definitions & CucumberSpringConfiguration
 )
 public class CucumberTest {
+    // This class acts as a test runner, not where tests go
 }

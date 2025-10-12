@@ -3,7 +3,7 @@ package com.example.QAProject.service;
 import com.example.QAProject.model.Task;
 import com.example.QAProject.repository.TaskRepository;
 import org.springframework.stereotype.Service;
-import org.springframework.web.util.HtmlUtils; // ADDED for XSS escaping
+import org.springframework.web.util.HtmlUtils;
 
 import java.util.List;
 import java.util.Optional;
@@ -22,42 +22,36 @@ public class TaskService {
         return taskRepository.findAll();
     }
 
-//    // Add a new task with validation and XSS prevention
-//    public Task addTask(Task task) {
-//        if (task.getTitle() == null || task.getTitle().trim().isEmpty()) {
-//            throw new IllegalArgumentException("Title is required");
-//        }
-//
-//        // FIXED XSS: escape HTML characters to prevent script injection
-//        task.setTitle(HtmlUtils.htmlEscape(task.getTitle()));
-//        task.setDescription(HtmlUtils.htmlEscape(task.getDescription()));
-//
-//        // Safe from SQL injection since using repository
-//        return taskRepository.save(task);
-//    }
-
+    // Add a new task with validation + XSS escaping
     public Task addTask(Task task) {
         if (task.getTitle() == null || task.getTitle().trim().isEmpty()) {
             throw new IllegalArgumentException("Title is required");
         }
+
+        // Escape user-provided text to avoid stored XSS
+        task.setTitle(HtmlUtils.htmlEscape(task.getTitle()));
+        if (task.getDescription() != null) {
+            task.setDescription(HtmlUtils.htmlEscape(task.getDescription()));
+        }
+
         return taskRepository.save(task);
     }
-
 
     // Get a task by ID
     public Optional<Task> getTask(Long id) {
         return taskRepository.findById(id);
     }
 
-    // Update a task with XSS prevention
+    // Update a task with validation + XSS escaping
     public Task updateTask(Task task) {
         if (task.getTitle() == null || task.getTitle().trim().isEmpty()) {
             throw new IllegalArgumentException("Title is required");
         }
 
-        // FIXED XSS: escape HTML characters
         task.setTitle(HtmlUtils.htmlEscape(task.getTitle()));
-        task.setDescription(HtmlUtils.htmlEscape(task.getDescription()));
+        if (task.getDescription() != null) {
+            task.setDescription(HtmlUtils.htmlEscape(task.getDescription()));
+        }
 
         return taskRepository.save(task);
     }
@@ -67,9 +61,13 @@ public class TaskService {
         taskRepository.deleteById(id);
     }
 
-    // Search tasks by keyword
+    // Search tasks by keyword (escape input to prevent XSS when reflecting back)
     public List<Task> searchTasks(String keyword) {
-        // SAFE: repository method handles parameter binding
-        return taskRepository.findByTitleContainingIgnoreCase(keyword);
+        if (keyword == null) {
+            return taskRepository.findAll();
+        }
+        // Note: Html escaping here prevents reflected XSS if keyword is echoed back.
+        String safeKeyword = HtmlUtils.htmlEscape(keyword);
+        return taskRepository.findByTitleContainingIgnoreCase(safeKeyword);
     }
 }
